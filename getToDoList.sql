@@ -1,0 +1,9 @@
+DELIMITER //
+DROP PROCEDURE IF EXISTS getToDoList //
+
+CREATE PROCEDURE getToDoList(IN users VARCHAR(500))
+BEGIN
+  SELECT *
+    FROM toDoList WHERE users = username;
+END //
+DELIMITER ;
