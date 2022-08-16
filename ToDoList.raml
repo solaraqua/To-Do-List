@@ -1,0 +1,233 @@
+#%RAML 1.0
+title: ToDo List! API
+version: v0.2
+baseUri: http://api.samplehost.com
+mediaType: application/json
+securitySchemes:
+  basicAuth:
+    type: Basic Authentication
+    responses:
+      404:
+        body:
+          application/json:
+            example: |
+              {
+                "message": "Cookie/Login not found"
+              }
+types:
+  Item:
+    type: object
+    properties:
+      done: boolean
+      todo: string
+  URI:
+    type: string
+  User:
+    type: object
+    properties:
+      username: string
+      password: string
+/item:
+  /{done}:
+    get:
+      description: |
+        Retreive the state of a ToDo list item, which will come back
+        as either True or False.
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                {
+                  "done": False
+                }
+    put:
+      description: |
+        Edit the state of a ToDo List item to change it to a completed
+        state.
+      responses:
+        202:
+          body:
+            application/json:
+              example: |
+                {
+                  "done": True
+                }
+  /{todo}:
+    get:
+      description: |
+        Retrieve the description of the action that the user wanted to
+        fulfill.
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                {
+                  "todo": "Go to Moncton for game tournament"
+                }
+    put:
+      description: |
+        Change the text of an item in the to do list
+      responses:
+        409:
+          body:
+            application/json:
+              example: |
+                {
+                  "message": "No change detected."
+                }
+        202:
+          body:
+            application/json:
+              example: |
+                {
+                  "todo": "This is a changed todo item text!"
+                }
+  get:
+    description: |
+      Retrieves an item from the to do list including text and state
+    responses:
+      404:
+        body:
+          application/json:
+            example: |
+              {
+              "message": "ToDo List item not found"
+              }
+      200:
+        body:
+          application/json:
+            example: |
+              {
+                "item": [
+                  {
+                    "done": False
+                    "todo": "Make sure to get Theo's cake at 5pm on Sunday"
+                  },
+                  {
+                    "done": False
+                    "todo": "Sign up for EI"
+                  }
+                ]
+              }
+  post:
+    description: |
+      Adds a new item to the to do list
+    queryParameters:
+      done: boolean
+      todo:
+        type: string
+        example: Buy cat food on Sunday.
+    responses:
+      201:
+        body:
+          application/json:
+            example: |
+              {
+                "message": "ToDo List item added successfully!"
+              }
+    body:
+      application/json:
+        example: |
+          {
+            "item": [
+              {
+                "done": False
+                "todo": "Clean Apartment on Monday."
+              },
+              {
+                "done": False
+                "todo": "Change smoke detector battery on Wednesday."
+              }
+            ]
+          }
+
+/user:
+  /{password}:
+    put:
+      description: |
+        Changes the password to something different
+      responses:
+        409:
+          body:
+            application/json:
+              example: |
+                {
+                  "message": "Password must be different."
+                }
+        202:
+          body:
+            application/json:
+              example: |
+                {
+                  "password": "cHanGedPassword!"
+                }
+  /{username}:
+    get:
+      description: |
+       Get the username for a user
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                {
+                  "username": "BenjieJayz"
+                }
+  get:
+    responses:
+      404:
+        body:
+          application/json:
+            example: |
+              {
+              "message": "User not found"
+              }
+      200:
+        body:
+          application/json:
+            example: |
+              {
+                "user": [
+                  {
+                    "username": "BenjieJay"
+                  },
+                  {
+                    "username": "EZMoney"
+                  }
+                ]
+              }
+  post:
+    description: |
+      Creation of a user
+    queryParameters:
+      username:
+        type: string
+        example: Poppeye
+      password:
+        type: string
+        example: MyPaSsWoRd
+    responses:
+      201:
+        body:
+          application/json:
+            example: |
+              {
+                "message": "User added successfully!"
+              }
+    body:
+      application/json:
+        example: |
+          {
+            "user": [
+              {
+                "username": "TheKeepz"
+                "password": "SeCurePassWord"
+              },
+              {
+                "username": "DDKah"
+                "password": "NooNEwilLGettHIs"
+              }
+            ]
+          }
